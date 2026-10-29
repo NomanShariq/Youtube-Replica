@@ -7,6 +7,9 @@ dist/
 web-build/
 expo-env.d.ts
 
+*.tsbuildinfo
+.metro-health-check*
+
 android/
 ios/
 
