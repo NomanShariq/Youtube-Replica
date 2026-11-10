@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   View, Text, Image, FlatList, ScrollView, TouchableOpacity, TextInput,
-  StyleSheet, Platform, ViewToken, Share, BackHandler,
+  StyleSheet, Platform, Share, BackHandler,
 } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -41,6 +41,10 @@ type PostItem = {
 type FeedItem = VideoItem | ShortsItem | PostItem;
 
 type Comment = { id: string; user: string; text: string };
+
+type ViewableInfo = {
+  viewableItems: { item: any; isViewable: boolean }[];
+};
 
 const MY_AVATAR = 'https://i.pravatar.cc/100?img=15';
 
@@ -523,7 +527,7 @@ export default function App() {
 
   const full = !!current && !mini;
 
-  const onViewableItemsChanged = useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {
+  const onViewableItemsChanged = useRef(({ viewableItems }: ViewableInfo) => {
     const first = viewableItems.find((v) => (v.item as FeedItem).type === 'video');
     if (first) setActiveId((first.item as FeedItem).id);
   }).current;
@@ -586,7 +590,7 @@ export default function App() {
               extraData={`${activeId}-${boxW}-${current ? current.id : 0}`}
               renderItem={renderItem}
               ListHeaderComponent={<Chips />}
-              onViewableItemsChanged={onViewableItemsChanged}
+              onViewableItemsChanged={onViewableItemsChanged as any}
               viewabilityConfig={viewabilityConfig}
               showsVerticalScrollIndicator={false}
             />
